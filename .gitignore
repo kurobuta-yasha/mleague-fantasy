@@ -1,0 +1,14 @@
+.DS_Store
+*.swp
+.venv/
+__pycache__/
+node_modules/
+dist/
+.env
+.env.*
+
+# 認証情報（絶対にコミットしない）
+private/
+*.secret
+credentials*.json
+token*.json
