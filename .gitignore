@@ -12,3 +12,4 @@ private/
 *.secret
 credentials*.json
 token*.json
+_site/

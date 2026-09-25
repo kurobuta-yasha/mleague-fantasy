@@ -1,0 +1,20 @@
+{
+  "title": "Mリーグ 3チーム合計ポイント勝負",
+  "season": "2026-27",
+  "participants": [
+    { "name": "AZ",         "teams": ["U-NEXT Pirates", "渋谷ABEMAS", "EX風林火山"] },
+    { "name": "マンジャロ", "teams": ["渋谷ABEMAS", "EX風林火山", "BEAST X"] },
+    { "name": "ちんこ",     "teams": ["EX風林火山", "赤坂ドリブンズ", "渋谷ABEMAS"] },
+    { "name": "りょーた",   "teams": ["U-NEXT Pirates", "赤坂ドリブンズ", "渋谷ABEMAS"] },
+    { "name": "うなぎ",     "teams": ["U-NEXT Pirates", "KONAMI麻雀格闘倶楽部", "渋谷ABEMAS"] },
+    { "name": "マツ",       "teams": ["セガサミーフェニックス", "TEAM RAIDEN / 雷電", "KADOKAWAサクラナイツ"] },
+    { "name": "カズ",       "teams": ["U-NEXT Pirates", "BEAST X", "EARTH JETS"] },
+    { "name": "K",          "teams": ["U-NEXT Pirates", "EX風林火山", "KONAMI麻雀格闘倶楽部"] },
+    { "name": "黒豚",       "teams": ["U-NEXT Pirates", "KADOKAWAサクラナイツ", "KONAMI麻雀格闘倶楽部"] },
+    { "name": "ガキ",       "teams": ["U-NEXT Pirates", "KONAMI麻雀格闘倶楽部", "EARTH JETS"] },
+    { "name": "おま",       "teams": ["BEAST X", "EARTH JETS", "セガサミーフェニックス"] },
+    { "name": "トミー",     "teams": ["TEAM RAIDEN / 雷電", "BEAST X", "KONAMI麻雀格闘倶楽部"] },
+    { "name": "おど",       "teams": ["EX風林火山", "赤坂ドリブンズ", "KONAMI麻雀格闘倶楽部"] },
+    { "name": "KC",         "teams": ["KONAMI麻雀格闘倶楽部", "赤坂ドリブンズ", "U-NEXT Pirates"] }
+  ]
+}

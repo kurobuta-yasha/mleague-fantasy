@@ -1,0 +1,14 @@
+{
+  "teams": [
+    { "name": "渋谷ABEMAS",            "short": "ABEMAS",   "aliases": ["ABEMAS", "アベマズ"] },
+    { "name": "BEAST X",               "short": "BEAST",    "aliases": ["BEAST", "ビースト"] },
+    { "name": "U-NEXT Pirates",        "short": "Pirates",  "aliases": ["Pirates", "パイレーツ"] },
+    { "name": "EX風林火山",            "short": "風林火山", "aliases": ["風林火山"] },
+    { "name": "TEAM RAIDEN / 雷電",    "short": "雷電",     "aliases": ["雷電", "TEAM雷電", "RAIDEN"] },
+    { "name": "KADOKAWAサクラナイツ",  "short": "サクラ",   "aliases": ["サクラナイツ"] },
+    { "name": "KONAMI麻雀格闘倶楽部",  "short": "格闘倶楽部", "aliases": ["KONAMI", "麻雀格闘倶楽部", "格闘倶楽部"] },
+    { "name": "EARTH JETS",            "short": "JETS",     "aliases": ["JETS", "ジェッツ"] },
+    { "name": "赤坂ドリブンズ",        "short": "ドリブンズ", "aliases": ["ドリブンズ"] },
+    { "name": "セガサミーフェニックス", "short": "フェニックス", "aliases": ["フェニックス"] }
+  ]
+}
