@@ -1,16 +1,22 @@
 {
-  "updated_at": "2026-09-30T05:05:41+09:00",
+  "updated_at": "2026-10-02T05:25:01+09:00",
   "source": "https://m-league.jp/",
   "teams": [
     {
       "name": "KADOKAWAサクラナイツ",
-      "point": 197.2,
-      "games": 12,
+      "point": 337.0,
+      "games": 14,
       "games_total": 120
     },
     {
       "name": "渋谷ABEMAS",
       "point": 70.1,
+      "games": 14,
+      "games_total": 120
+    },
+    {
+      "name": "赤坂ドリブンズ",
+      "point": 68.6,
       "games": 14,
       "games_total": 120
     },
@@ -21,45 +27,39 @@
       "games_total": 120
     },
     {
-      "name": "U-NEXT Pirates",
-      "point": 18.1,
+      "name": "KONAMI麻雀格闘倶楽部",
+      "point": 36.3,
       "games": 14,
       "games_total": 120
     },
     {
-      "name": "KONAMI麻雀格闘倶楽部",
-      "point": 11.1,
-      "games": 12,
+      "name": "EX風林火山",
+      "point": -7.2,
+      "games": 16,
       "games_total": 120
     },
     {
-      "name": "赤坂ドリブンズ",
-      "point": 1.8,
-      "games": 12,
+      "name": "U-NEXT Pirates",
+      "point": -61.7,
+      "games": 16,
       "games_total": 120
     },
     {
       "name": "TEAM RAIDEN / 雷電",
-      "point": -12.9,
-      "games": 12,
-      "games_total": 120
-    },
-    {
-      "name": "EX風林火山",
-      "point": -33.0,
+      "point": -98.7,
       "games": 14,
       "games_total": 120
     },
     {
       "name": "セガサミーフェニックス",
-      "point": -122.8,
-      "games": 12,
+      "point": -173.1,
+      "games": 14,
       "games_total": 120
     },
     {
       "name": "EARTH JETS",
-      "point": -184.9,
-      "games": 12,
+      "point": -226.6,
+      "games": 14,
       "games_total": 120
     }
   ]
