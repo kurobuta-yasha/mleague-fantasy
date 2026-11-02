@@ -1,65 +1,65 @@
 {
-  "updated_at": "2026-10-28T05:09:35+09:00",
+  "updated_at": "2026-11-03T08:10:11+09:00",
   "source": "https://m-league.jp/",
   "teams": [
     {
       "name": "KADOKAWAサクラナイツ",
-      "point": 429.9,
-      "games": 38,
-      "games_total": 120
-    },
-    {
-      "name": "KONAMI麻雀格闘倶楽部",
-      "point": 271.2,
-      "games": 38,
-      "games_total": 120
-    },
-    {
-      "name": "U-NEXT Pirates",
-      "point": 69.1,
-      "games": 38,
-      "games_total": 120
-    },
-    {
-      "name": "TEAM RAIDEN / 雷電",
-      "point": 39.7,
-      "games": 38,
-      "games_total": 120
-    },
-    {
-      "name": "赤坂ドリブンズ",
-      "point": 37.1,
-      "games": 38,
-      "games_total": 120
-    },
-    {
-      "name": "セガサミーフェニックス",
-      "point": -32.9,
-      "games": 38,
-      "games_total": 120
-    },
-    {
-      "name": "BEAST X",
-      "point": -47.2,
-      "games": 40,
+      "point": 337.0,
+      "games": 14,
       "games_total": 120
     },
     {
       "name": "渋谷ABEMAS",
-      "point": -243.5,
-      "games": 38,
+      "point": 70.1,
+      "games": 14,
+      "games_total": 120
+    },
+    {
+      "name": "赤坂ドリブンズ",
+      "point": 68.6,
+      "games": 14,
+      "games_total": 120
+    },
+    {
+      "name": "BEAST X",
+      "point": 55.3,
+      "games": 14,
+      "games_total": 120
+    },
+    {
+      "name": "KONAMI麻雀格闘倶楽部",
+      "point": 36.3,
+      "games": 14,
       "games_total": 120
     },
     {
       "name": "EX風林火山",
-      "point": -253.2,
-      "games": 40,
+      "point": -7.2,
+      "games": 16,
+      "games_total": 120
+    },
+    {
+      "name": "U-NEXT Pirates",
+      "point": -61.7,
+      "games": 16,
+      "games_total": 120
+    },
+    {
+      "name": "TEAM RAIDEN / 雷電",
+      "point": -98.7,
+      "games": 14,
+      "games_total": 120
+    },
+    {
+      "name": "セガサミーフェニックス",
+      "point": -173.1,
+      "games": 14,
       "games_total": 120
     },
     {
       "name": "EARTH JETS",
-      "point": -270.2,
-      "games": 38,
+      "point": -226.6,
+      "games": 14,
       "games_total": 120
     }
   ]
