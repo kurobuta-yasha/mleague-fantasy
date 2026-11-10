@@ -12,15 +12,18 @@
 ## しくみ
 
 ```
-m-league.jp トップの「ランキング」 ──(GitHub Actions / 毎日深夜)──▶ data/standings.json
+m-league.jp のデータAPI ─────────(GitHub Actions / 毎日深夜)──▶ data/standings.json
                                                                    data/history.json
 data/picks.json（誰がどのチーム） ─┐
                                    ├─▶ site/index.html がブラウザで合計・ソート ─▶ GitHub Pages
 data/standings.json ───────────────┘
 ```
 
-- 取得: `scripts/fetch_standings.py`（標準ライブラリのみ）。公式トップの
-  レギュラーシーズンのランキング表からチーム名・累計pt・試合数を読む
+- 取得: `scripts/fetch_standings.py`（標準ライブラリのみ）。公式サイトのデータAPI
+  （`https://m-league.jp/api/mleague/data?kind=ranking`）からチーム名・累計pt・試合数を読む。
+  APIが使えないときはトップページのランキング表を予備で読む
+  - 2026-11 の公式サイト改修以降、トップページHTMLのランキングは古いまま残っている
+  - 取得した試合数が前回より減っていたら古いデータとみなして更新しない
 - 実行タイミング: JST 00:30 / 03:00 / 07:00 の毎日。変更がなければコミットしない
 - 順位は表示のたびに計算するので、ポイントが入れ替われば自動で並び替わる
 - `data/history.json` に日ごとのスナップショットを残し、前回からの順位変動（▲▼）を出す
