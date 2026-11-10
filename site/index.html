@@ -94,6 +94,23 @@
   td.pt { font-weight: 700; }
   .picked { color: var(--muted); font-size: 12px; }
 
+  .sortbar { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; scrollbar-width: none; }
+  .sortbar::-webkit-scrollbar { display: none; }
+  .sortbar button {
+    flex: none; border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    padding: 5px 11px; border-radius: 999px; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  }
+  .sortbar button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  #pro-table td, #pro-table th { padding: 9px 8px; }
+  #pro-table tr.pro { cursor: pointer; }
+  #pro-table tr.pro td.name-cell { width: 100%; }
+  .pname { font-weight: 700; white-space: nowrap; }
+  .pteam { color: var(--muted); font-size: 11.5px; white-space: nowrap; }
+  tr.detail td { background: var(--chip); padding: 8px 10px 10px; }
+  .dgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 8px; font-size: 11.5px; font-variant-numeric: tabular-nums; }
+  .dgrid span { display: block; color: var(--muted); font-size: 10.5px; }
+  .dgrid b { font-weight: 700; font-size: 13px; }
+
   .note { color: var(--muted); font-size: 12px; margin-top: 18px; }
   .note a { color: inherit; }
   .error { background: var(--card); border: 1px solid var(--minus); color: var(--minus); padding: 12px; border-radius: 10px; }
@@ -112,8 +129,9 @@
   </header>
 
   <nav class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" data-tab="players">参加者ランキング</button>
+    <button role="tab" aria-selected="true" data-tab="players">参加者順位</button>
     <button role="tab" aria-selected="false" data-tab="teams">チーム成績</button>
+    <button role="tab" aria-selected="false" data-tab="pros">個人成績</button>
   </nav>
 
   <section id="players"><ol class="list" id="player-list"></ol></section>
@@ -122,6 +140,14 @@
       <thead><tr><th>#</th><th>チーム</th><th class="num">pt</th><th class="num">選んだ人</th></tr></thead>
       <tbody id="team-body"></tbody>
     </table>
+  </section>
+  <section id="pros" hidden>
+    <div class="sortbar" id="pro-sort"></div>
+    <table id="pro-table">
+      <thead><tr><th>#</th><th>選手</th><th class="num">試合</th><th class="num">平着</th><th class="num">pt</th></tr></thead>
+      <tbody id="pro-body"><tr><td colspan="5" class="picked">個人成績はまだありません</td></tr></tbody>
+    </table>
+    <p class="note">行をタップすると着順や打点などの詳細。<span id="pro-updated"></span></p>
   </section>
 
   <p class="note">
@@ -139,11 +165,12 @@
     return r.json();
   });
 
-  let picks, teamsMaster, standings, history;
+  let picks, teamsMaster, standings, history, pros;
   try {
-    [picks, teamsMaster, standings, history] = await Promise.all([
+    [picks, teamsMaster, standings, history, pros] = await Promise.all([
       get("data/picks.json"), get("data/teams.json"), get("data/standings.json"),
       get("data/history.json").catch(() => []),
+      get("data/players.json").catch(() => null),
     ]);
   } catch (e) {
     $("player-list").innerHTML = `<li class="error">データの読み込みに失敗しました（${e.message}）</li>`;
@@ -227,11 +254,66 @@
       <td class="num picked">${pickCount[t.name] || 0}人</td>
     </tr>`).join("");
 
+  // 個人成績（プロ雀士）
+  if (pros && pros.players && pros.players.length) {
+    const pct = (x) => x == null ? "-" : (x * 100).toFixed(1) + "%";
+    const num = (x) => x == null ? "-" : Math.round(x).toLocaleString("ja-JP");
+    const SORTS = [
+      { key: "point", label: "ポイント", val: (p) => p.point },
+      { key: "avg_rank", label: "平均着順", val: (p) => -p.avg_rank },
+      { key: "top_rate", label: "トップ率", val: (p) => p.top_rate ?? 0 },
+      { key: "last_avoid_rate", label: "ラス回避率", val: (p) => p.last_avoid_rate ?? 0 },
+      { key: "win_rate", label: "アガリ率", val: (p) => p.win_rate ?? 0 },
+      { key: "deal_in_rate", label: "放銃率(低)", val: (p) => -(p.deal_in_rate ?? 1) },
+      { key: "best_score", label: "最高スコア", val: (p) => p.best_score ?? 0 },
+    ];
+    let current = SORTS[0];
+    const renderPros = () => {
+      document.querySelectorAll("#pro-sort button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.key === current.key));
+      const rows = rankBy(pros.players.map((p) => ({ ...p })), current.val);
+      $("pro-body").innerHTML = rows.map((p, i) => `<tr class="pro" data-i="${i}">
+          <td>${p.rank}</td>
+          <td class="name-cell"><div class="pname">${esc(p.name)}</div><div class="pteam">${esc(shortName[p.team] ?? p.team)}${pickCount[p.team] ? `・${pickCount[p.team]}人が選択` : ""}</div></td>
+          <td class="num">${p.games}</td>
+          <td class="num">${p.avg_rank != null ? p.avg_rank.toFixed(2) : "-"}</td>
+          <td class="num pt ${cls(p.point)}">${fmt(p.point)}</td>
+        </tr>
+        <tr class="detail" hidden><td colspan="5"><div class="dgrid">
+          <div><span>1-2-3-4着</span><b>${p.first}-${p.second}-${p.third}-${p.fourth}</b></div>
+          <div><span>トップ率</span><b>${pct(p.top_rate)}</b></div>
+          <div><span>連対率</span><b>${pct(p.rentai_rate)}</b></div>
+          <div><span>ラス回避率</span><b>${pct(p.last_avoid_rate)}</b></div>
+          <div><span>アガリ率</span><b>${pct(p.win_rate)}</b></div>
+          <div><span>放銃率</span><b>${pct(p.deal_in_rate)}</b></div>
+          <div><span>リーチ率</span><b>${pct(p.riichi_rate)}</b></div>
+          <div><span>副露率</span><b>${pct(p.call_rate)}</b></div>
+          <div><span>平均打点</span><b>${num(p.avg_win)}</b></div>
+          <div><span>放銃平均打点</span><b>${num(p.avg_deal_in)}</b></div>
+          <div><span>最高スコア</span><b>${num(p.best_score)}</b></div>
+          <div><span>総局数</span><b>${p.hands ?? "-"}</b></div>
+        </div></td></tr>`).join("");
+    };
+    $("pro-sort").innerHTML = SORTS.map((s) => `<button type="button" data-key="${s.key}">${s.label}</button>`).join("");
+    $("pro-sort").addEventListener("click", (e) => {
+      const b = e.target.closest("button");
+      if (!b) return;
+      current = SORTS.find((s) => s.key === b.dataset.key);
+      renderPros();
+    });
+    $("pro-body").addEventListener("click", (e) => {
+      const tr = e.target.closest("tr.pro");
+      if (tr) tr.nextElementSibling.hidden = !tr.nextElementSibling.hidden;
+    });
+    renderPros();
+    $("pro-updated").textContent = "データ更新 " + new Date(pros.updated_at).toLocaleString("ja-JP", {
+      timeZone: "Asia/Tokyo", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit",
+    });
+  }
+
   // タブ
   document.querySelectorAll(".tabs button").forEach((btn) => btn.addEventListener("click", () => {
     document.querySelectorAll(".tabs button").forEach((b) => b.setAttribute("aria-selected", b === btn));
-    $("players").hidden = btn.dataset.tab !== "players";
-    $("teams").hidden = btn.dataset.tab !== "teams";
+    ["players", "teams", "pros"].forEach((id) => ($(id).hidden = btn.dataset.tab !== id));
   }));
 })();
 </script>
