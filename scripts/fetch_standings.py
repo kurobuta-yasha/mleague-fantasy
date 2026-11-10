@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""m-league.jp トップページの「ランキング（レギュラー）」からチーム累計ポイントを取得し、
+"""m-league.jp からチームのレギュラーシーズン累計ポイントを取得し、
 data/standings.json と data/history.json を更新する。
 
+取得元（上から順に試す）:
+1. 公式サイトのデータAPI `/api/mleague/data?kind=ranking`（2026-11 のサイト改修以降、
+   公式ページ自体がこのAPIから描画している）
+2. トップページHTMLの「ランキング（レギュラー）」。改修後は古いまま残っているので予備扱い
+
 - 標準ライブラリのみ（GitHub Actions でそのまま動く）
-- 10チーム揃わない・未知のチーム名があるなど、ページ構造が変わった疑いがある場合は
-  既存データを書き換えずに非0で終了する
-- `--html FILE` でローカルのHTMLをパースできる（テスト用）
+- 10チーム揃わない・未知のチーム名がある・前回より試合数が減っている（古いデータ）など、
+  おかしいと判断したら既存データを書き換えずに非0で終了する（Actions が失敗→メール通知）
+- `--html FILE` / `--api-json FILE` でローカルのファイルをパースできる（テスト用）
 """
 
 from __future__ import annotations
@@ -20,6 +25,8 @@ from html import unescape
 from pathlib import Path
 
 SOURCE_URL = "https://m-league.jp/"
+API_URL = "https://m-league.jp/api/mleague/data?kind=ranking"
+REGULAR_GAMES = 120  # 1チームあたりのレギュラーシーズン試合数
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 JST = timezone(timedelta(hours=9))
@@ -45,13 +52,42 @@ def parse_point(text: str) -> float:
     return float(t)
 
 
-def fetch_html() -> str:
+def fetch(url: str) -> str:
     req = urllib.request.Request(
-        SOURCE_URL,
+        url,
         headers={"User-Agent": "Mozilla/5.0 (mleague-fantasy standings bot)"},
     )
     with urllib.request.urlopen(req, timeout=30) as res:
         return res.read().decode("utf-8")
+
+
+def parse_api(data: dict, team_index: dict[str, str]) -> list[dict]:
+    if data.get("stale"):
+        raise ValueError("APIが stale=true を返しました")
+    phase = (data.get("season") or {}).get("phase")
+    if phase != "regular":
+        raise ValueError(f"レギュラーシーズンのデータではありません（phase={phase}）")
+    rows = []
+    for t in data["ranking"]["teams"]:
+        name = team_index.get(normalize(t["name"]))
+        if name is None:
+            raise ValueError(f"未知のチーム名: {t['name']}")
+        rows.append(
+            {
+                "name": name,
+                "point": round(float(t["points"]), 1),
+                "games": int(t["games"]),
+                "games_total": REGULAR_GAMES,
+            }
+        )
+    check_rows(rows, team_index)
+    return sorted(rows, key=lambda r: r["point"], reverse=True)
+
+
+def check_rows(rows: list[dict], team_index: dict[str, str]) -> None:
+    expected = len(set(team_index.values()))
+    if len(rows) != expected or len({r["name"] for r in rows}) != expected:
+        raise ValueError(f"{expected}チーム分取れていません（{len(rows)}件）")
 
 
 def parse_standings(html: str, team_index: dict[str, str]) -> list[dict]:
@@ -81,9 +117,7 @@ def parse_standings(html: str, team_index: dict[str, str]) -> list[dict]:
             }
         )
 
-    expected = len(set(team_index.values()))
-    if len(rows) != expected or len({r["name"] for r in rows}) != expected:
-        raise ValueError(f"{expected}チーム分取れていません（{len(rows)}件）")
+    check_rows(rows, team_index)
     return rows
 
 
@@ -112,14 +146,26 @@ def update_history(rows: list[dict], now: datetime) -> bool:
     return True
 
 
+def load_rows(args, team_index: dict[str, str]) -> tuple[list[dict], str]:
+    if args.html:
+        return parse_standings(Path(args.html).read_text(encoding="utf-8"), team_index), args.html
+    if args.api_json:
+        return parse_api(json.loads(Path(args.api_json).read_text(encoding="utf-8")), team_index), args.api_json
+    try:
+        return parse_api(json.loads(fetch(API_URL)), team_index), API_URL
+    except Exception as e:  # noqa: BLE001 — どんな失敗でも予備のHTMLを試す
+        print(f"WARN: API から取得できませんでした（{e}）。トップページHTMLを試します", file=sys.stderr)
+        return parse_standings(fetch(SOURCE_URL), team_index), SOURCE_URL
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--html", help="ネットから取らずにこのHTMLファイルをパースする")
+    ap.add_argument("--api-json", help="ネットから取らずにこのAPIレスポンスJSONをパースする")
     args = ap.parse_args()
 
-    html = Path(args.html).read_text(encoding="utf-8") if args.html else fetch_html()
     try:
-        rows = parse_standings(html, load_team_index())
+        rows, source = load_rows(args, load_team_index())
     except ValueError as e:
         print(f"ERROR: {e}", file=sys.stderr)
         return 1
@@ -134,10 +180,17 @@ def main() -> int:
     if prev and prev["teams"] == rows:
         print("変更なし")
         return 0
+    # 公式側が古いデータを返すことがある（2026-11 の改修時に実際に起きた）ので、試合数が減ったら採用しない
+    if prev:
+        prev_games = sum(t["games"] or 0 for t in prev["teams"])
+        new_games = sum(r["games"] or 0 for r in rows)
+        if new_games < prev_games:
+            print(f"ERROR: 取得データの試合数が前回より少ない（{new_games} < {prev_games}）。古いデータとみなして更新しません", file=sys.stderr)
+            return 1
 
     write_json(
         standings_path,
-        {"updated_at": now.isoformat(timespec="seconds"), "source": SOURCE_URL, "teams": rows},
+        {"updated_at": now.isoformat(timespec="seconds"), "source": source, "teams": rows},
     )
     update_history(rows, now)
     for r in rows:
