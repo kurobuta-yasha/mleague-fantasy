@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-11T06:21:52+09:00",
+  "updated_at": "2026-11-13T06:52:58+09:00",
   "source": "https://m-league.jp/api/mleague/data?kind=ranking",
   "teams": [
     {
       "name": "KADOKAWAサクラナイツ",
-      "point": 578.1,
-      "games": 52,
+      "point": 730.8,
+      "games": 54,
       "games_total": 120
     },
     {
@@ -16,20 +16,20 @@
     },
     {
       "name": "KONAMI麻雀格闘倶楽部",
-      "point": 163.7,
-      "games": 52,
+      "point": 174.2,
+      "games": 54,
       "games_total": 120
     },
     {
       "name": "赤坂ドリブンズ",
-      "point": 75.8,
-      "games": 52,
+      "point": 74.8,
+      "games": 54,
       "games_total": 120
     },
     {
       "name": "セガサミーフェニックス",
-      "point": -69.4,
-      "games": 50,
+      "point": -35.1,
+      "games": 52,
       "games_total": 120
     },
     {
@@ -40,26 +40,26 @@
     },
     {
       "name": "EARTH JETS",
-      "point": -127.7,
-      "games": 50,
-      "games_total": 120
-    },
-    {
-      "name": "渋谷ABEMAS",
-      "point": -201.2,
-      "games": 50,
+      "point": -181.7,
+      "games": 52,
       "games_total": 120
     },
     {
       "name": "U-NEXT Pirates",
-      "point": -212.3,
+      "point": -195.4,
+      "games": 54,
+      "games_total": 120
+    },
+    {
+      "name": "渋谷ABEMAS",
+      "point": -262.9,
       "games": 52,
       "games_total": 120
     },
     {
       "name": "EX風林火山",
-      "point": -298.9,
-      "games": 50,
+      "point": -396.6,
+      "games": 52,
       "games_total": 120
     }
   ]
