@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-11-24T11:26:20+09:00",
+  "updated_at": "2026-11-25T08:58:51+09:00",
   "source": "https://m-league.jp/api/mleague/data?kind=ranking",
   "teams": [
     {
       "name": "KADOKAWAサクラナイツ",
-      "point": 602.4,
-      "games": 62,
+      "point": 481.3,
+      "games": 64,
       "games_total": 120
     },
     {
       "name": "セガサミーフェニックス",
-      "point": 233.2,
-      "games": 62,
+      "point": 347.9,
+      "games": 64,
       "games_total": 120
     },
     {
       "name": "赤坂ドリブンズ",
-      "point": 184.1,
-      "games": 62,
+      "point": 315.0,
+      "games": 64,
       "games_total": 120
     },
     {
       "name": "TEAM RAIDEN / 雷電",
-      "point": 167.7,
-      "games": 62,
+      "point": 120.3,
+      "games": 64,
       "games_total": 120
     },
     {
@@ -33,15 +33,15 @@
       "games_total": 120
     },
     {
-      "name": "BEAST X",
-      "point": -95.9,
-      "games": 62,
+      "name": "EARTH JETS",
+      "point": -132.5,
+      "games": 64,
       "games_total": 120
     },
     {
-      "name": "EARTH JETS",
-      "point": -164.7,
-      "games": 62,
+      "name": "BEAST X",
+      "point": -137.9,
+      "games": 64,
       "games_total": 120
     },
     {
@@ -52,14 +52,14 @@
     },
     {
       "name": "EX風林火山",
-      "point": -315.6,
-      "games": 62,
+      "point": -290.0,
+      "games": 64,
       "games_total": 120
     },
     {
       "name": "渋谷ABEMAS",
-      "point": -396.8,
-      "games": 62,
+      "point": -489.7,
+      "games": 64,
       "games_total": 120
     }
   ]
