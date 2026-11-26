@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-25T08:58:51+09:00",
+  "updated_at": "2026-11-27T08:55:31+09:00",
   "source": "https://m-league.jp/api/mleague/data?kind=ranking",
   "teams": [
     {
       "name": "KADOKAWAサクラナイツ",
-      "point": 481.3,
-      "games": 64,
+      "point": 430.2,
+      "games": 66,
       "games_total": 120
     },
     {
@@ -21,45 +21,45 @@
       "games_total": 120
     },
     {
-      "name": "TEAM RAIDEN / 雷電",
-      "point": 120.3,
-      "games": 64,
-      "games_total": 120
-    },
-    {
       "name": "KONAMI麻雀格闘倶楽部",
-      "point": 39.5,
-      "games": 64,
+      "point": 164.3,
+      "games": 66,
       "games_total": 120
     },
     {
-      "name": "EARTH JETS",
-      "point": -132.5,
-      "games": 64,
+      "name": "TEAM RAIDEN / 雷電",
+      "point": 116.5,
+      "games": 66,
       "games_total": 120
     },
     {
       "name": "BEAST X",
-      "point": -137.9,
-      "games": 64,
+      "point": -138.1,
+      "games": 66,
       "games_total": 120
     },
     {
-      "name": "U-NEXT Pirates",
-      "point": -253.9,
-      "games": 64,
+      "name": "EARTH JETS",
+      "point": -174.8,
+      "games": 66,
       "games_total": 120
     },
     {
       "name": "EX風林火山",
-      "point": -290.0,
-      "games": 64,
+      "point": -307.8,
+      "games": 66,
+      "games_total": 120
+    },
+    {
+      "name": "U-NEXT Pirates",
+      "point": -332.6,
+      "games": 66,
       "games_total": 120
     },
     {
       "name": "渋谷ABEMAS",
-      "point": -489.7,
-      "games": 64,
+      "point": -420.6,
+      "games": 66,
       "games_total": 120
     }
   ]
